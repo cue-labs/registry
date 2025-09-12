@@ -1,0 +1,97 @@
+@experiment(explicitopen)
+
+package registry
+
+import "github.com/cue-labs/registry/githubissueform"
+
+issues: [_]: githubissueform.#Root
+
+issues: "01-content-request.yml": {
+	name: "New content request"
+	description: """
+		Request new content for the curated modules in the CUE Central Registry
+		"""
+	labels: [
+		"addition",
+		"triage",
+	]
+	title: "add someSuggestedContent"
+	body: [{
+		githubissueform.#DropdownEl
+		type: "dropdown"
+		attributes: {
+			label:       "Schema format"
+			description: "What format is the schema defined in?"
+			options: ["JSON Schema", "CRD", "OpenAPI", "Other"]
+			default: 0
+		}
+		validations: required: true
+	}, {
+		githubissueform.#InputEl
+		type: "input"
+		attributes: {
+			label:       "URL for upstream schema"
+			description: "Link to the canonical source for the schema upstream"
+			placeholder: "https://raw.githubusercontent.com/example/repo/HEAD/schema/example.json"
+		}
+		validations: required: true
+	}, {
+		githubissueform.#InputEl
+		type: "input"
+		attributes: {
+			label:       "Suggested module name"
+			description: "Suggested CUE module path to contain the schema"
+			placeholder: "cue.dev/x/schemapath"
+		}
+		validations: required: true
+	}, {
+		githubissueform.#InputEl
+		type: "input"
+		attributes: {
+			label:       "Suggested package name"
+			description: "Suggested CUE package path within the module (. means top level package)"
+			placeholder: "."
+			value:       "."
+		}
+		validations: required: true
+	}, {
+		githubissueform.#InputEl
+		type: "input"
+		attributes: {
+			label:       "Suggested definition name"
+			description: "Suggested name of definition for schema within the package (JSON Schema only)"
+			placeholder: "#Schema"
+		}
+	}, {
+		githubissueform.#DropdownEl
+		type: "dropdown"
+		attributes: {
+			label:       "Upstream versioning scheme"
+			description: "What versioning scheme is used for the upstream schema?"
+			options: ["Semver", "Latest", "Other (describe below)", "Not sure"]
+			default: 1
+		}
+		validations: required: true
+	}, {
+		githubissueform.#TextAreaEl
+		type: "textarea"
+		attributes: {
+			label:       "Alternative URL(s) for upstream schema sources"
+			description: "Information on other possible sources for the schema"
+		}
+	}, {
+		githubissueform.#TextAreaEl
+		type: "textarea"
+		attributes: {
+			label:       "Sources of test data"
+			description: "URLs or information on where to obtain data files to test the schema against, for example an upstream test suite"
+		}
+	}, {
+		githubissueform.#TextAreaEl
+		type: "textarea"
+		attributes: {
+			label:       "Other relevant information"
+			description: "Any other information about the request"
+		}
+	}]
+}
